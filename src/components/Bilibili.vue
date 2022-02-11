@@ -12,10 +12,10 @@
     <hr />
     <div v-show="title">
       <h1>
-        <a :href="videoUrl">{{ title }}</a>
+        视频标题：<a :href="videoUrl">{{ title }}</a>
       </h1>
-      <div>{{ desc }}</div>
-      <a :href="ownerUrl">UP主：{{ owner.name }}</a>
+      <div style="width: 60%; margin: 0 auto;">{{ desc }}</div>
+      UP主：<a :href="ownerUrl">{{ owner.name }}</a>
       <h1 v-if="isShowDuration">p{{start}}-p{{end}}累计时长：{{hour}}小时{{this.minute}}分钟{{this.second}}秒</h1>
     </div>
   </div>
@@ -47,13 +47,47 @@ export default {
   },
   watch: {
     start() {
-      this.isShowDuration = false
+      if (this.BVNumber) {
+        let sum = 0;
+        for (let index = this.start - 1; index < this.end; index++) {
+          if (index < 0 || index >= this.videoList.length) {
+            return alert("分p非法");
+          }
+          sum += this.videoList[index].duration;
+        }
+        this.hour = Math.floor(sum / 3600);
+        sum %= 3600;
+        this.minute = Math.floor(sum / 60);
+        sum %= 60;
+        this.second = sum;
+      } else {
+        this.isShowDuration = false
+      }
     },
     end() {
-      this.isShowDuration = false
+      if (this.BVNumber) {
+        let sum = 0;
+        for (let index = this.start - 1; index < this.end; index++) {
+          if (index < 0 || index >= this.videoList.length) {
+            return alert("分p非法");
+          }
+          sum += this.videoList[index].duration;
+        }
+        this.hour = Math.floor(sum / 3600);
+        sum %= 3600;
+        this.minute = Math.floor(sum / 60);
+        sum %= 60;
+        this.second = sum;
+      } else {
+        this.isShowDuration = false
+      }
     },
     BVNumber() {
       if (!this.BVNumber) {
+        this.isShowDuration = false
+        this.videoList = []
+        this.start = 1
+        this.end = 1
         return
       }
       axios
@@ -65,7 +99,8 @@ export default {
         .then(
           (response) => {
             if (response.data.code === -400) {
-              return alert("BV号填写有误！");
+              // return alert("BV号填写有误！");
+              return
             }
             let data = response.data.data;
             this.title = data.title;
@@ -164,5 +199,9 @@ input {
 
 button {
   margin-top: 5px;
+}
+
+a{
+  color: rgb(31, 156, 228);
 }
 </style>

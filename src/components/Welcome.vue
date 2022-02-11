@@ -5,7 +5,7 @@
       <el-main>
         <el-card class="box-card">
           <div slot="header" class="clearfix">
-            <span class="tool">B站分p时长计算</span>
+            <span class="tool" @click="$router.push({name:'Bilibili'})">B站分p时长计算</span>
           </div>
           <div class="text item">
             <span class="tool-desc">根据BV号以及起止分p号计算出累计时长</span>
@@ -15,7 +15,7 @@
 
         <el-card class="box-card">
           <div slot="header" class="clearfix">
-            <span class="tool">HUST宿舍电量趋势查询</span>
+            <span class="tool" @click="$router.push({name:'Elec'})">HUST宿舍电量趋势查询</span>
           </div>
           <div class="text item">
             <span class="tool-desc">显示出宿舍近10天来电量变化情况</span>
@@ -53,6 +53,7 @@ export default {
 .tool {
   font-weight: bold;
   font-size: 30px;
+  cursor: pointer;
 }
 
 .tool-desc {
